@@ -13,7 +13,7 @@ if (typeof window !== "undefined") {
 
 const useWeb3Modal = () => {
   const [modal, setWeb3Modal] = useState<any>(web3Modal);
-
+  console.log(providerOptions);
   useEffect(() => {
     if (!modal) {
       setWeb3Modal(new Web3Modal({

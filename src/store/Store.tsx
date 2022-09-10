@@ -20,7 +20,7 @@ export const StoreProvider = ({
   const [globalState, dispatch] = useReducer(reducers, initialState);
 
   return (
-    <Store.Provider value={{ state: globalState, dispatch }}>
+    <Store.Provider value={[globalState, dispatch]}>
       {children}
     </Store.Provider>
   );
