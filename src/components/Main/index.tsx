@@ -15,7 +15,7 @@ const Main = () => {
 
   return (
     <Container>
-      <Typography>Ethernize</Typography>
+      <Typography>Ethernizer</Typography>
       <Button account={account} onConnect={connect} onDisconnect={disconnect} />
       {account?.length > 0 && <Form account={account} contract={contract} />}
     </Container>

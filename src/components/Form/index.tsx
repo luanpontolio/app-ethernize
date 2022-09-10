@@ -6,6 +6,8 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { ethernize } from 'utils/call';
 import { base64ToHex } from 'utils/service';
 import { messages } from 'utils/message';
@@ -19,6 +21,17 @@ interface FormProps {
 interface DragDropFileProps {
   setName: any
   setData: any
+}
+
+const FormInput = ({ setName }) => {
+  const handleChange = (e) => {
+    e.preventDefault();
+    setName(e.target.value.trim());
+  }
+
+  return (
+    <Textarea multiline maxRows={100} minRows={1} onChange={handleChange} />
+  )
 }
 
 const DragDropFile = ({ setData, setName }: DragDropFileProps) => {
@@ -80,7 +93,8 @@ const DragDropFile = ({ setData, setName }: DragDropFileProps) => {
 };
 
 const Form = ({ account, contract }: FormProps) => {
-  const [name, setName] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [name, setName] = useState<string>(null);
   const [data, setData] = useState<string>("");
   const [type, setType] = useState<string>("file");
 
@@ -89,13 +103,13 @@ const Form = ({ account, contract }: FormProps) => {
   };
 
   function dispatchAction(key: string) {
+    setLoading(key === 'info');
     toast[key](messages[key], {
       position: toast.POSITION.BOTTOM_RIGHT,
-      autoClose: 3000
     });
   }
 
-  async function onSubmit(name: string, data: string) {
+  async function onSubmit(name: string, data: string = "0x") {
     if (!account && !contract && !name.length && !data.length) return;
 
     await ethernize(contract, account, name, data)(dispatchAction);
@@ -118,14 +132,17 @@ const Form = ({ account, contract }: FormProps) => {
       </Content>
       <Content>
         <Section>
-          { type === 'file' ? <DragDropFile setName={setName} setData={setData} /> : <Input /> }
-          <Button
-            variant="contained"
-            disabled={!data.length}
-            onClick={() => onSubmit(name, data)}
-          >
-            Send
-          </Button>
+          { type === 'file' ? <DragDropFile setName={setName} setData={setData} /> : <FormInput setName={setName} /> }
+          { loading ?
+            <CircularProgress /> :
+            <Button
+              variant="contained"
+              disabled={!name?.length}
+              onClick={() => onSubmit(name, data)}
+            >
+              Send
+            </Button>
+          }
         </Section>
       </Content>
       <ToastContainer />
@@ -133,7 +150,7 @@ const Form = ({ account, contract }: FormProps) => {
   )
 }
 
-const { Container, Content, Section, SectionContent, Input, Label } = {
+const { Container, Content, Section, SectionContent, Input, Textarea, Label } = {
   Container: styled.div`
     display: grid;
     gap: 1rem;
@@ -190,7 +207,8 @@ const { Container, Content, Section, SectionContent, Input, Label } = {
           background: #fff;
         }
       `}
-  `
+  `,
+  Textarea: styled(TextField)``
 
 }
 
