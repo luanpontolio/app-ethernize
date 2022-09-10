@@ -15,6 +15,11 @@ const nextConfig = {
       new webpack.EnvironmentPlugin(process.env)
     )
 
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+    };
+
     return config
   },
 }

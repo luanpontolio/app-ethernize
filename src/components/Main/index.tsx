@@ -9,14 +9,15 @@ import { useEthernize } from 'hook/useContract';
 
 const Main = () => {
   const [state, dispatch] = useStore();
-  const { account } = state;
+  const { account, contract } = state;
   const { connect, disconnect } = useWallet(state, dispatch);
+  useEthernize();
 
   return (
     <Container>
       <Typography>Ethernize</Typography>
       <Button account={account} onConnect={connect} onDisconnect={disconnect} />
-      {account.lenght > 0 && <Form account={account} contract={contract} />}
+      {account?.length > 0 && <Form account={account} contract={contract} />}
     </Container>
   )
 }

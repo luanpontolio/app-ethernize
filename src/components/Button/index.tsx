@@ -8,7 +8,7 @@ interface ButtonProps {
 
 export default function ConnectWallet({ account, onConnect, onDisconnect }: ButtonProps) {
   const Connect = () => (
-    <Button onClick={onConnect} variant="contained" >
+    <Button onClick={onConnect} variant="contained">
       {"Connect"}
     </Button>
   )
