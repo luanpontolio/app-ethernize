@@ -9,8 +9,7 @@ export const useContract = (abi: any, address: string) => {
 
   useEffect(() => {
     if (web3) {
-      debugger;
-      dispatch(setContract(new web3?.eth?.Contract(abi, address)));
+      dispatch(setContract(new web3.eth.Contract(abi, address)));
     }
   }, [abi, address, web3]);
 };
