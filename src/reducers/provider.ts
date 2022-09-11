@@ -1,4 +1,3 @@
-import { network } from "hardhat";
 import Web3 from "web3";
 
 export type TState = {
