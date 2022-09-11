@@ -7,7 +7,11 @@ import { ThemeProvider } from 'styled-components';
 import { StoreProvider } from 'store/Store';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const defaultTheme = createTheme();
+  const defaultTheme = createTheme({
+    palette:{
+      type: 'dark',
+    }
+  });
 
   console.log("Default theme passing to ThemeProvider", defaultTheme);
 

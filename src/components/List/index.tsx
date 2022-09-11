@@ -47,9 +47,9 @@ const ListResult = ({ contract }) => {
       {data.map(({ name, value }) => (
         <>
           <ListItem>
-            <ListItemText primary={name === 'null' ? value : name} />
-            <ListItemAvatar>
-              {name.match(/image/g) && <img src={`${name},${value}`} height={100} width={100} />}
+            {name === 'null' && <ListItemText primary={value} />}
+            <ListItemAvatar style={{ margin: '0 auto' }}>
+              {name.match(/image/g) && <img src={`${name},${value}`} height={400} width={400} />}
             </ListItemAvatar>
           </ListItem>
           <Divider />
@@ -63,6 +63,7 @@ const { ListContent } = {
   ListContent: styled(List)`
     width: '100%';
     background-color: #2C2C2C;
+    color: #fff;
   `
 }
 
