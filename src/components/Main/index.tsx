@@ -5,11 +5,12 @@ import useWallet from 'hook/useWallet';
 import { useStore } from 'store/Store';
 import Button from '../Button'
 import Form from '../Form'
+import ListResult from '../List'
 import { useEthernize } from 'hook/useContract';
 
 const Main = () => {
   const [state, dispatch] = useStore();
-  const { account, contract } = state;
+  const { account, contract, status } = state;
   const { connect, disconnect } = useWallet(state, dispatch);
   useEthernize();
 
@@ -18,6 +19,7 @@ const Main = () => {
       <Typography>Ethernizer</Typography>
       <Button account={account} onConnect={connect} onDisconnect={disconnect} />
       {account?.length > 0 && <Form account={account} contract={contract} />}
+      {status || contract && <ListResult contract={contract} /> }
     </Container>
   )
 }
@@ -27,6 +29,7 @@ const { Container } = {
     display: grid;
     grid-auto-flow: columns;
     gap: 1rem;
+    width: 800px;
     margin-bottom: 1rem;
   `
 }

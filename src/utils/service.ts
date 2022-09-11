@@ -9,7 +9,12 @@ export const base64ToHex = (str: string) => {
 }
 
 export const hexToBase64 = (hexstring: string) => {
-  return btoa(hexstring.match(/\w{2}/g).map(function(a) {
+  return window.btoa(hexstring.match(/\w{2}/g).map(function(a) {
       return String.fromCharCode(parseInt(a, 16));
   }).join(""));
+}
+
+export const hexToString = (hexstring: string) => {
+  let buffer = Buffer.from(hexstring, "hex");
+  return buffer.toString("utf8");
 }
