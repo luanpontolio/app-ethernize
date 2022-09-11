@@ -13,3 +13,8 @@ export const hexToBase64 = (hexstring: string) => {
       return String.fromCharCode(parseInt(a, 16));
   }).join(""));
 }
+
+export const hexToString = (hexstring: string) => {
+  let buffer = Buffer.from(hexstring, "hex");
+  return buffer.toString("utf8");
+}
