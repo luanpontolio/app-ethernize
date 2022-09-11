@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ToastContainer, toast } from 'react-toastify';
 import Radio from '@material-ui/core/Radio';
@@ -84,8 +84,7 @@ const DragDropFile = ({ setData, setName }: DragDropFileProps) => {
         <Input ref={inputRef} type="file" onChange={handleChange} />
         <Label htmlFor="input-file-upload" active={dragActive}>
           <div>
-            <p>Drag and drop your file here or</p>
-            <Button onClick={onButtonClick}>Upload a file</Button>
+            <Button onClick={onButtonClick} variant="contained">Upload a file</Button>
           </div>
         </Label>
         { dragActive && <div id="drag-file-element" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div> }
@@ -97,6 +96,7 @@ const DragDropFile = ({ setData, setName }: DragDropFileProps) => {
 const Form = ({ account, contract }: FormProps) => {
   const [state, dispatch] = useStore();
   const { loading } = state;
+  const [showLoading, setShowLoading] = useState<boolean>(false);
   const [name, setName] = useState<string>(null);
   const [data, setData] = useState<string>("");
   const [type, setType] = useState<string>("file");
@@ -118,6 +118,10 @@ const Form = ({ account, contract }: FormProps) => {
     await ethernize(contract, account, name, data)(dispatchAction);
   }
 
+  useEffect(() => {
+    setShowLoading(loading);
+  }, [loading])
+
   return (
     <Container>
       <Content>
@@ -136,7 +140,7 @@ const Form = ({ account, contract }: FormProps) => {
       <Content>
         <Section>
           { type === 'file' ? <DragDropFile setName={setName} setData={setData} /> : <FormInput setData={setData} /> }
-          { loading ?
+          { showLoading ?
             <CircularProgress /> :
             <Button
               variant="contained"
