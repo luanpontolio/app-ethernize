@@ -12,6 +12,8 @@ import { ethernize } from 'utils/call';
 import { base64ToHex } from 'utils/service';
 import { messages } from 'utils/message';
 import 'react-toastify/dist/ReactToastify.css';
+import { useStore } from 'store/Store';
+import { setLoading } from '../../reducers/provider'
 
 interface FormProps {
   account: string
@@ -23,10 +25,10 @@ interface DragDropFileProps {
   setData: any
 }
 
-const FormInput = ({ setName }) => {
+const FormInput = ({ setData }) => {
   const handleChange = (e) => {
     e.preventDefault();
-    setName(e.target.value.trim());
+    setData(Buffer.from(e.target.value.trim()).toString('hex'));
   }
 
   return (
@@ -93,7 +95,8 @@ const DragDropFile = ({ setData, setName }: DragDropFileProps) => {
 };
 
 const Form = ({ account, contract }: FormProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [state, dispatch] = useStore();
+  const { loading } = state;
   const [name, setName] = useState<string>(null);
   const [data, setData] = useState<string>("");
   const [type, setType] = useState<string>("file");
@@ -103,14 +106,14 @@ const Form = ({ account, contract }: FormProps) => {
   };
 
   function dispatchAction(key: string) {
-    setLoading(key === 'info');
+    dispatch(setLoading(key === 'info'));
     toast[key](messages[key], {
       position: toast.POSITION.BOTTOM_RIGHT,
     });
   }
 
-  async function onSubmit(name: string, data: string = "0x") {
-    if (!account && !contract && !name.length && !data.length) return;
+  async function onSubmit(name: string = "0x", data: string = "0x") {
+    if (!account && !contract) return;
 
     await ethernize(contract, account, name, data)(dispatchAction);
   }
@@ -132,12 +135,12 @@ const Form = ({ account, contract }: FormProps) => {
       </Content>
       <Content>
         <Section>
-          { type === 'file' ? <DragDropFile setName={setName} setData={setData} /> : <FormInput setName={setName} /> }
+          { type === 'file' ? <DragDropFile setName={setName} setData={setData} /> : <FormInput setData={setData} /> }
           { loading ?
             <CircularProgress /> :
             <Button
               variant="contained"
-              disabled={!name?.length}
+              disabled={!data?.length}
               onClick={() => onSubmit(name, data)}
             >
               Send

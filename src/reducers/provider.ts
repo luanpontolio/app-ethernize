@@ -6,6 +6,7 @@ export type TState = {
   account?: string | null | undefined
   network?: string | null | undefined,
   wrongNetwork?: boolean | null,
+  status?: boolean | null,
   contract?: any,
 }
 
@@ -73,7 +74,7 @@ export const setWrongNetwork = (wrongNetwork: boolean) => ({
 })
 
 export function reducers(state: TState = initialState, action: TAction) {
-  const { type, provider, web3Provider, account, contract, network, wrongNetwork } = action;
+  const { type, provider, web3Provider, account, contract, status, network, wrongNetwork } = action;
 
   switch (type) {
     case Types.SET_PROVIDER:
